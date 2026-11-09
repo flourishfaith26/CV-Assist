@@ -1,0 +1,11 @@
+{
+  "name": "cv-assist-workspace",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix cv-assist run dev",
+    "build": "npm --prefix cv-assist run build",
+    "preview": "npm --prefix cv-assist run preview",
+    "test": "npm --prefix cv-assist run test"
+  }
+}
+
