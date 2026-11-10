@@ -3,7 +3,6 @@ import {
   ArrowRight,
   Sparkles,
   CheckCircle2,
-  ShieldCheck,
   FileText,
   Sliders,
   Download,
@@ -27,8 +26,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md border border-olive-200 dark:border-olive-800 bg-olive-50 dark:bg-olive-950/40 text-olive-800 dark:text-olive-300 text-xs font-medium mb-6">
-            <ShieldCheck className="w-4 h-4 text-olive-700 dark:text-olive-400" />
-            <span>100% Applicant Tracking System (ATS) Compliant Architecture</span>
+            <Sparkles className="w-4 h-4 text-olive-700 dark:text-olive-400" />
+            <span>AI-Assisted Optimization & 100% ATS-Compliant Architecture</span>
           </div>
 
           {/* Main Headline */}
@@ -38,7 +37,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
           {/* Subtitle */}
           <p className="max-w-2xl mx-auto text-base sm:text-lg text-gray-600 dark:text-gray-400 mb-10 leading-relaxed">
-            Applicant Tracking Systems discard over 75% of resumes due to complex tables, graphics, and multi-column templates. CV Assist formats your resume into a clean, single-column A4 document engineered specifically for parser readability.
+            Applicant Tracking Systems discard over 75% of resumes due to unparsed templates and passive bullet phrasing. CV Assist pairs real-time ATS scoring and AI action-verb optimization with a single-column format recruiters love.
           </p>
 
           {/* Action Buttons */}

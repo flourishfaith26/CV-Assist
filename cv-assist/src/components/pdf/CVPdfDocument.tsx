@@ -4,29 +4,32 @@ import type { CVData } from '../../types/cv';
 
 const styles = StyleSheet.create({
   page: {
-    padding: 36, // 36pt margins as required by spec
+    padding: 36, // 36pt margins as required by ATS spec
     backgroundColor: '#FFFFFF',
     fontFamily: 'Helvetica',
     fontSize: 9.5,
-    lineHeight: 1.4,
+    lineHeight: 1.45,
     color: '#111827',
   },
   headerContainer: {
-    marginBottom: 14,
+    marginBottom: 10,
+    paddingBottom: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
     textAlign: 'center',
   },
   name: {
-    fontSize: 18,
+    fontSize: 19,
     fontFamily: 'Helvetica-Bold',
     color: '#111827',
-    marginBottom: 3,
+    marginBottom: 2,
     textTransform: 'none',
   },
   targetTitle: {
-    fontSize: 10.5,
+    fontSize: 10,
     fontFamily: 'Helvetica-Bold',
     color: '#4A5D23',
-    marginBottom: 5,
+    marginBottom: 4,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
@@ -36,25 +39,24 @@ const styles = StyleSheet.create({
     lineHeight: 1.3,
   },
   section: {
-    marginTop: 10,
+    marginTop: 8,
     marginBottom: 4,
   },
   sectionTitle: {
-    fontSize: 11,
+    fontSize: 10,
     fontFamily: 'Helvetica-Bold',
     color: '#4A5D23',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
-    borderBottomStyle: 'solid',
+    borderBottomWidth: 1.5,
+    borderBottomColor: '#D1D5DB',
     paddingBottom: 2,
     marginBottom: 6,
   },
   summaryText: {
     fontSize: 9.5,
-    lineHeight: 1.4,
-    color: '#111827',
+    lineHeight: 1.45,
+    color: '#1F2937',
     textAlign: 'justify',
   },
   experienceBlock: {
@@ -64,7 +66,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'baseline',
-    marginBottom: 1,
+    marginBottom: 2,
   },
   jobTitle: {
     fontSize: 10,
@@ -73,8 +75,8 @@ const styles = StyleSheet.create({
   },
   jobCompany: {
     fontSize: 9.5,
-    fontFamily: 'Helvetica',
-    color: '#4B5563',
+    fontFamily: 'Helvetica-Bold',
+    color: '#4A5D23',
   },
   jobDate: {
     fontSize: 8.5,
@@ -83,20 +85,21 @@ const styles = StyleSheet.create({
   },
   bulletRow: {
     flexDirection: 'row',
-    marginLeft: 12, // 12pt left margin as specified
+    marginLeft: 10,
     marginTop: 2,
     marginBottom: 1,
   },
   bulletMarker: {
     width: 10,
     fontSize: 9.5,
-    color: '#111827',
+    fontFamily: 'Helvetica-Bold',
+    color: '#4A5D23',
   },
   bulletContent: {
     flex: 1,
     fontSize: 9.5,
-    lineHeight: 1.4,
-    color: '#111827',
+    lineHeight: 1.45,
+    color: '#1F2937',
   },
   educationBlock: {
     flexDirection: 'row',
@@ -118,13 +121,9 @@ const styles = StyleSheet.create({
     color: '#4B5563',
   },
   skillsText: {
-    fontSize: 9.5,
-    lineHeight: 1.4,
-    color: '#111827',
-  },
-  skillsLabel: {
-    fontFamily: 'Helvetica-Bold',
-    color: '#111827',
+    fontSize: 9,
+    lineHeight: 1.45,
+    color: '#1F2937',
   },
 });
 
@@ -135,7 +134,6 @@ interface CVPdfDocumentProps {
 export const CVPdfDocument: React.FC<CVPdfDocumentProps> = ({ data }) => {
   const { contact, targetJobTitle, summary, experience, education, skills } = data;
 
-  // Build contact line elements separated by vertical bars
   const contactParts: string[] = [];
   if (contact.email) contactParts.push(contact.email);
   if (contact.phone) contactParts.push(contact.phone);
@@ -143,7 +141,7 @@ export const CVPdfDocument: React.FC<CVPdfDocumentProps> = ({ data }) => {
   if (contact.linkedin) contactParts.push(contact.linkedin);
   if (contact.portfolio) contactParts.push(contact.portfolio);
 
-  const contactString = contactParts.join('  |  ');
+  const contactString = contactParts.join('  •  ');
 
   return (
     <Document title={`${contact.fullName || 'Resume'} - CV Assist`} author={contact.fullName}>
@@ -170,9 +168,9 @@ export const CVPdfDocument: React.FC<CVPdfDocumentProps> = ({ data }) => {
         {/* Core Skills */}
         {skills && skills.length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Skills & Competencies</Text>
+            <Text style={styles.sectionTitle}>Skills & Technical Expertise</Text>
             <Text style={styles.skillsText}>
-              {skills.join('  •  ')}
+              {skills.join('   •   ')}
             </Text>
           </View>
         )}
@@ -180,17 +178,17 @@ export const CVPdfDocument: React.FC<CVPdfDocumentProps> = ({ data }) => {
         {/* Work Experience */}
         {experience && experience.length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Work Experience</Text>
+            <Text style={styles.sectionTitle}>Professional Experience</Text>
             {experience.map((job) => (
               <View key={job.id} style={styles.experienceBlock} wrap={false}>
                 <View style={styles.jobHeader}>
                   <View style={{ flexDirection: 'row', alignItems: 'baseline', flex: 1, flexWrap: 'wrap' }}>
                     <Text style={styles.jobTitle}>{job.jobTitle || 'Job Title'}</Text>
                     {job.company && (
-                      <Text style={styles.jobCompany}>, {job.company}</Text>
+                      <Text style={styles.jobCompany}> – {job.company}</Text>
                     )}
                   </View>
-                  {(job.startDate || job.endDate) && (
+                  {(job.startDate || job.endDate || job.isCurrent) && (
                     <Text style={styles.jobDate}>
                       {job.startDate}
                       {job.startDate && (job.endDate || job.isCurrent) ? ' – ' : ''}
@@ -217,13 +215,13 @@ export const CVPdfDocument: React.FC<CVPdfDocumentProps> = ({ data }) => {
         {/* Education */}
         {education && education.length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Education</Text>
+            <Text style={styles.sectionTitle}>Education & Credentials</Text>
             {education.map((edu) => (
               <View key={edu.id} style={styles.educationBlock} wrap={false}>
-                <View style={{ flex: 1 }}>
+                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'baseline' }}>
                   <Text style={styles.educationDegree}>{edu.degree || 'Degree'}</Text>
                   {edu.institution && (
-                    <Text style={styles.educationInstitution}>{edu.institution}</Text>
+                    <Text style={styles.educationInstitution}> – {edu.institution}</Text>
                   )}
                 </View>
                 {edu.graduationYear && (

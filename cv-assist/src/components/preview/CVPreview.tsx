@@ -16,7 +16,7 @@ export const CVPreview: React.FC<CVPreviewProps> = ({ data, zoomScale = 1 }) => 
   if (contact.linkedin) contactParts.push(contact.linkedin);
   if (contact.portfolio) contactParts.push(contact.portfolio);
 
-  const contactString = contactParts.join('  |  ');
+  const contactString = contactParts.join('  •  ');
 
   return (
     <div className="w-full flex justify-center bg-gray-100 dark:bg-gray-900 p-2 sm:p-4 rounded-md overflow-x-auto transition-colors">
@@ -29,72 +29,84 @@ export const CVPreview: React.FC<CVPreviewProps> = ({ data, zoomScale = 1 }) => 
         }}
       >
         {/* Name & Contact Header */}
-        <header className="text-center mb-[14pt]">
-          <h1 className="text-[18pt] font-bold text-[#111827] leading-tight mb-1">
+        <header className="text-center pb-[10pt] mb-[10pt] border-b border-gray-200">
+          <h1 className="text-[20pt] font-extrabold text-[#111827] tracking-tight leading-none mb-1.5">
             {contact.fullName || 'Your Full Name'}
           </h1>
           {targetJobTitle && (
-            <p className="text-[10.5pt] font-bold text-[#4A5D23] uppercase tracking-wide mb-1">
+            <p className="text-[10pt] font-bold text-[#4A5D23] uppercase tracking-wider mb-2">
               {targetJobTitle}
             </p>
           )}
           {contactString ? (
-            <p className="text-[8.5pt] text-[#4B5563] leading-normal">
-              {contactString}
+            <p className="text-[8.5pt] font-medium text-[#4B5563] leading-normal flex items-center justify-center flex-wrap gap-x-2">
+              {contactParts.map((part, idx) => (
+                <React.Fragment key={idx}>
+                  {idx > 0 && <span className="text-[#9CA3AF]">•</span>}
+                  <span>{part}</span>
+                </React.Fragment>
+              ))}
             </p>
           ) : (
             <p className="text-[8.5pt] text-gray-400 italic">
-              email@example.com | +1 (555) 000-0000 | City, State | linkedin.com/in/username
+              email@example.com • +1 (555) 000-0000 • City, State • linkedin.com/in/username
             </p>
           )}
         </header>
 
         {/* Professional Summary */}
         {summary && summary.trim().length > 0 && (
-          <section className="mt-[10pt] mb-[4pt]">
-            <h2 className="text-[11pt] font-bold uppercase text-[#4A5D23] tracking-wider border-b border-[#E5E7EB] pb-[2pt] mb-[6pt]">
+          <section className="mb-[12pt]">
+            <h2 className="text-[10pt] font-bold uppercase text-[#4A5D23] tracking-wider border-b-2 border-gray-200 pb-[2pt] mb-[6pt]">
               Professional Summary
             </h2>
-            <p className="text-[9.5pt] leading-[1.4] text-[#111827] text-justify">
+            <p className="text-[9.5pt] leading-[1.5] text-[#1F2937] text-justify">
               {summary}
             </p>
           </section>
         )}
 
-        {/* Skills & Competencies */}
+        {/* Core Skills & Competencies */}
         {skills && skills.length > 0 && (
-          <section className="mt-[10pt] mb-[4pt]">
-            <h2 className="text-[11pt] font-bold uppercase text-[#4A5D23] tracking-wider border-b border-[#E5E7EB] pb-[2pt] mb-[6pt]">
-              Skills & Competencies
+          <section className="mb-[12pt]">
+            <h2 className="text-[10pt] font-bold uppercase text-[#4A5D23] tracking-wider border-b-2 border-gray-200 pb-[2pt] mb-[6pt]">
+              Skills & Technical Expertise
             </h2>
-            <p className="text-[9.5pt] leading-[1.4] text-[#111827]">
-              {skills.join('  •  ')}
-            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {skills.map((skill, index) => (
+                <span
+                  key={index}
+                  className="inline-flex items-center text-[8.5pt] font-medium text-[#1F2937] bg-gray-50 border border-gray-200 px-2 py-0.5 rounded"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
           </section>
         )}
 
         {/* Work Experience */}
         {experience && experience.length > 0 && (
-          <section className="mt-[10pt] mb-[4pt]">
-            <h2 className="text-[11pt] font-bold uppercase text-[#4A5D23] tracking-wider border-b border-[#E5E7EB] pb-[2pt] mb-[6pt]">
-              Work Experience
+          <section className="mb-[12pt]">
+            <h2 className="text-[10pt] font-bold uppercase text-[#4A5D23] tracking-wider border-b-2 border-gray-200 pb-[2pt] mb-[6pt]">
+              Professional Experience
             </h2>
-            <div className="space-y-[8pt]">
+            <div className="space-y-[10pt]">
               {experience.map((job) => (
                 <div key={job.id} className="break-inside-avoid">
-                  <div className="flex justify-between items-baseline mb-[1pt]">
-                    <div className="flex items-baseline flex-wrap gap-1">
+                  <div className="flex justify-between items-baseline mb-[2pt]">
+                    <div>
                       <span className="text-[10pt] font-bold text-[#111827]">
                         {job.jobTitle || 'Job Title'}
                       </span>
                       {job.company && (
-                        <span className="text-[9.5pt] text-[#4B5563]">
-                          , {job.company}
+                        <span className="text-[9.5pt] font-semibold text-[#4A5D23]">
+                          {' '}– {job.company}
                         </span>
                       )}
                     </div>
                     {(job.startDate || job.endDate || job.isCurrent) && (
-                      <span className="text-[8.5pt] text-[#4B5563] font-normal whitespace-nowrap ml-2">
+                      <span className="text-[8.5pt] text-[#4B5563] font-medium whitespace-nowrap ml-2">
                         {job.startDate}
                         {job.startDate && (job.endDate || job.isCurrent) ? ' – ' : ''}
                         {job.isCurrent ? 'Present' : job.endDate}
@@ -102,17 +114,17 @@ export const CVPreview: React.FC<CVPreviewProps> = ({ data, zoomScale = 1 }) => 
                     )}
                   </div>
 
-                  {/* Bullet points: standard round black markers, 12pt left margin */}
+                  {/* Bullet points: standard round markers, 12pt left margin */}
                   {job.bullets && job.bullets.length > 0 && (
-                    <div className="ml-[12pt] mt-[2pt] space-y-[2pt]">
+                    <div className="ml-[10pt] mt-[3pt] space-y-[2.5pt]">
                       {job.bullets
                         .filter((bullet) => bullet.trim().length > 0)
                         .map((bullet, idx) => (
                           <div key={idx} className="flex items-start">
-                            <span className="w-[10pt] text-[9.5pt] text-[#111827] leading-[1.4] flex-shrink-0">
+                            <span className="w-[10pt] text-[9.5pt] text-[#4A5D23] font-bold leading-[1.45] flex-shrink-0">
                               •
                             </span>
-                            <span className="text-[9.5pt] leading-[1.4] text-[#111827]">
+                            <span className="text-[9.5pt] leading-[1.45] text-[#1F2937]">
                               {bullet}
                             </span>
                           </div>
@@ -127,9 +139,9 @@ export const CVPreview: React.FC<CVPreviewProps> = ({ data, zoomScale = 1 }) => 
 
         {/* Education */}
         {education && education.length > 0 && (
-          <section className="mt-[10pt] mb-[4pt]">
-            <h2 className="text-[11pt] font-bold uppercase text-[#4A5D23] tracking-wider border-b border-[#E5E7EB] pb-[2pt] mb-[6pt]">
-              Education
+          <section className="mb-[8pt]">
+            <h2 className="text-[10pt] font-bold uppercase text-[#4A5D23] tracking-wider border-b-2 border-gray-200 pb-[2pt] mb-[6pt]">
+              Education & Credentials
             </h2>
             <div className="space-y-[4pt]">
               {education.map((edu) => (
@@ -140,12 +152,12 @@ export const CVPreview: React.FC<CVPreviewProps> = ({ data, zoomScale = 1 }) => 
                     </span>
                     {edu.institution && (
                       <span className="text-[9.5pt] text-[#4B5563]">
-                        , {edu.institution}
+                        {' '}– {edu.institution}
                       </span>
                     )}
                   </div>
                   {edu.graduationYear && (
-                    <span className="text-[8.5pt] text-[#4B5563] whitespace-nowrap ml-2">
+                    <span className="text-[8.5pt] text-[#4B5563] font-medium whitespace-nowrap ml-2">
                       {edu.graduationYear}
                     </span>
                   )}

@@ -18,6 +18,7 @@ import { useCVState } from './hooks/useCVState';
 import { useTheme } from './hooks/useTheme';
 import { LandingPage } from './components/home/LandingPage';
 import { JobTargetInput } from './components/forms/JobTargetInput';
+import { AIAssistantPanel } from './components/ai/AIAssistantPanel';
 import { ContactForm } from './components/forms/ContactForm';
 import { SummaryForm } from './components/forms/SummaryForm';
 import { ExperienceForm } from './components/forms/ExperienceForm';
@@ -98,6 +99,14 @@ export function App() {
   const handleLoadSample = () => {
     resetCVData();
     setCurrentView('builder');
+  };
+
+  const handleAddSkills = (newSkills: string[]) => {
+    const existing = new Set(cvData.skills.map((s) => s.toLowerCase()));
+    const toAdd = newSkills.filter((s) => !existing.has(s.toLowerCase()));
+    if (toAdd.length > 0) {
+      updateSkills([...cvData.skills, ...toAdd]);
+    }
   };
 
   return (
@@ -233,9 +242,21 @@ export function App() {
                 mobileTab === 'preview' ? 'hidden lg:block' : 'block'
               }`}
             >
+              {/* AI Resume Assistant & Live ATS Audit */}
+              <AIAssistantPanel
+                cvData={cvData}
+                onApplySummary={updateSummary}
+                onAddSkills={handleAddSkills}
+              />
+
               <ContactForm contact={cvData.contact} onChange={updateContact} />
 
-              <SummaryForm summary={cvData.summary} onChange={updateSummary} />
+              <SummaryForm
+                summary={cvData.summary}
+                targetJobTitle={cvData.targetJobTitle}
+                skills={cvData.skills}
+                onChange={updateSummary}
+              />
 
               <SkillsForm skills={cvData.skills} onChange={updateSkills} />
 
