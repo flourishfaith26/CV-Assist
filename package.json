@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "npm --prefix cv-assist run dev",
-    "build": "npm --prefix cv-assist run build",
+    "build": "npm --prefix cv-assist run build && node -e \"const fs=require('fs');fs.cpSync('cv-assist/dist','dist',{recursive:true})\"",
     "preview": "npm --prefix cv-assist run preview",
     "test": "npm --prefix cv-assist run test"
   }
